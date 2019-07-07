@@ -5,7 +5,7 @@ from wtforms.validators import Required
 class PostForm(FlaskForm):
     title = StringField('Blog Post Title',validators=[Required()])
     post = TextAreaField('Post:',validators = [Required()])
-    category = SelectField('Type',choices=[('interview','Interview pitch'),('product','Product pitch'),('promotion','Promotion pitch'),('pickup','Pickup Lines')],validators=[Required()])
+    category = SelectField('Type',choices=[('tech','Tech Blog Post'),('entertainment','Entertainment Blog Post'),('fashion','Fashion Blog Post'),('automobiles','Automobiles Blog Post')],validators=[Required()])
     submit = SubmitField('Submit')
     
 class UpdateProfile(FlaskForm):
