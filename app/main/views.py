@@ -1,6 +1,7 @@
 from flask import render_template, request,redirect,url_for,abort 
 from ..models import Post, User, Comments
 from . import main
+from ..request import get_quote
 from .. import db, photos
 from .forms import UpdateProfile, PostForm, CommentsForm
 from flask_login import login_required,current_user
@@ -148,3 +149,13 @@ def delete_post(id):
     db.session.commit()
     #flash('Your post has been deleted!', 'success')
     return redirect(url_for('.index'))
+
+
+@main.route('/quote/')
+def quote():
+
+    '''
+    View function for random quote
+    '''
+    quote = get_quote()
+    return render_template('quote.html',quote = quote)  
