@@ -1,0 +1,14 @@
+{% macro displayPostsList(post_list) %}
+
+    {% for post in post_list %}
+        <div class="card panel bg">
+            <h4 class="text-center">{{ post.title }}</h4>
+            <p class="text-center">-{{post.post_content}}</p>
+            <p class="text-center"><a href="/post/{{post.id}}">More...</a></p>
+            <h5 class="text-center">Posted by: {{post.user.username}}</h5>
+            
+        </div>
+
+    {% endfor %}
+
+{% endmacro %}
