@@ -108,3 +108,10 @@ def new_post():
 
     title = 'Flask Blog Post'
     return render_template('new_post.html',title = title, post_form=form)
+
+@main.route('/user/<uname>/posts')
+def user_profile_posts(uname):
+    user = User.query.filter_by(username=uname).first()
+    posts = Post.query.filter_by(user_id = user.id).all()
+
+    return render_template("profile/posts.html", user=user,posts=posts)
