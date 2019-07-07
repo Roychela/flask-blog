@@ -115,3 +115,36 @@ def user_profile_posts(uname):
     posts = Post.query.filter_by(user_id = user.id).all()
 
     return render_template("profile/posts.html", user=user,posts=posts)
+
+@main.route("/post/<int:id>/update", methods=['GET', 'POST'])
+@login_required
+def update_post(id):
+    post = Post.get_post(id)
+    if post.user != current_user:
+        abort(403)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.post_category = form.category.data
+        post.post_content = form.post.data
+        db.session.commit()
+        #flash('Your post has been updated!', 'success')
+        return redirect(url_for('.post',id=post.id))
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.category.data = post.post_category
+        form.post.data = post.post_content
+    return render_template('new_post.html', title='Update Post',
+                           post_form=form, legend='Update Post')
+
+
+@main.route("/post/<int:id>/delete", methods=['POST'])
+@login_required
+def delete_post(id):
+    post = Post.get_post(id)
+    if post.user != current_user:
+        abort(403)
+    db.session.delete(post)
+    db.session.commit()
+    #flash('Your post has been deleted!', 'success')
+    return redirect(url_for('.index'))

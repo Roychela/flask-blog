@@ -1,0 +1,52 @@
+{% extends 'base.html'%}
+{% import 'macros.html' as macro%}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <p>{{post.post_content}}</p>
+        <span>
+        <p>Posted on {{date}} by {{post.user.username| capitalize}}</p>
+        <a href="/post/{{post.id}}?upvote=1">
+        <i class="material-icons"></i>
+            <i class="material-icons">thumb_up</i>
+        </a>{{post.upvotes}} <a href="/post/{{post.id}}?downvote=1">
+            <i class="material-icons">thumb_down</i>
+        </a>{{post.downvotes}}</span>
+        {% if post.user == current_user %}
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('.update_post', id=post.id) }}">Update</a>
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+          </div
+        {% endif %}
+         <!-- Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Are you sure you want to delete this Post?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form action="{{ url_for('.delete_post', id=post.id) }}" method="POST">
+            <input class="btn btn-danger" type="submit" value="Delete">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+    <div class="row">
+        <hr>
+        {% if current_user.is_authenticated %}
+            {{ wtf.quick_form(comment_form) }}
+        {% endif %}
+        <h3>Comments</h4>
+        {{macro.displayComments(comments)}}
+    </div>
+</div>
+{% endblock %}
