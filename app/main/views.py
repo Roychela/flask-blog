@@ -1,7 +1,11 @@
 from flask import render_template, request,redirect,url_for,abort 
-from ..models import Post, User
+from ..models import Post, User, Comments
+from . import main
 from .. import db, photos
-from .forms import UpdateProfile
+from .forms import UpdateProfile, PostForm, CommentsForm
+from flask_login import login_required,current_user
+from datetime import datetime
+
 
 @main.route('/')
 def index():
@@ -58,3 +62,49 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('main.profile',uname=uname))    
+
+@main.route('/post/<int:id>', methods = ['GET','POST'])
+def post(id):
+    post = Post.get_post(id)
+    posted = post.posted.strftime('%b %d, %Y')
+    if request.args.get("upvote"):
+        post.upvotes += 1
+
+        db.session.add(post)
+        db.session.commit()
+
+        return redirect("/post/{post_id}".format(post_id=post.id)) 
+
+    elif request.args.get("downvote"):
+        post.downvotes+=1
+
+        db.session.add(post)
+        db.session.commit()
+
+        return redirect("/post/{post_id}".format(post_id=post.id))
+
+    comment_form = CommentsForm()
+    if comment_form.validate_on_submit():
+        comment = comment_form.text.data
+
+        new_comment = Comments(comment = comment,user = current_user,post_id = post)
+
+        new_comment.save_comment()
+    comments = Comments.get_comments(post)
+
+    return render_template("post.html", post = post, comment_form = comment_form, comments = comments, date = posted)   
+@main.route('/post/new/', methods = ['GET','POST'])
+@login_required
+def new_post():
+    form = PostForm()
+
+    if form.validate_on_submit():
+        title = form.title.data 
+        post = form.post.data
+        category = form.category.data
+        new_post = Post(title = title,post_content=post,post_category=category,user=current_user, upvotes=0, downvotes=0)
+        new_post.save_post()
+        return redirect(url_for('.index'))
+
+    title = 'Flask Blog Post'
+    return render_template('new_post.html',title = title, post_form=form)
