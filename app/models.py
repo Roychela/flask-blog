@@ -70,7 +70,7 @@ class Post(db.Model):
 
     @classmethod
     def get_posts(cls,post_category):
-        posts = Post.query.filter_by(post_category=post_category).all()
+        posts = Post.query.order_by(Post.posted.desc()).filter_by(post_category=post_category).all()
         return posts
 
 class Comments(db.Model):
