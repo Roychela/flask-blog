@@ -5,7 +5,7 @@ FlaskBlog
 Roy Chela
 
 ## DESCRIPTION
-A blog application 
+A blog application that allows users to share their opinions on various topics.
 
 ## DATE
 04/07/2019
@@ -22,6 +22,10 @@ A blog application
 
 
 ## SETUP
+### Requirements
+*
+### Installation
+*
 
 ## LIVE SITE
 
