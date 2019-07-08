@@ -42,7 +42,7 @@ A blog application that allows users to share their opinions on various topics.
 3. [Pip](https://pip.pypa.io/en/stable/installing/)
 #### Clone the Repo and rename it to suit your needs.
 ```bash
-git clone https://github.com/JamesMutahi/flask-blog.git
+git clone https://github.com/Roychela/flask-blog.git
 ```
 #### Initialize git and add the remote repository
 ```bash
